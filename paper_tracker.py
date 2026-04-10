@@ -1726,6 +1726,739 @@ Write the review:"""
     return review_text
 
 
+_MANUAL_HTML = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaperTracker 使用说明书</title>
+<style>
+  :root {
+    --blue:   #1565C0;
+    --green:  #2E7D32;
+    --orange: #E65100;
+    --purple: #6A1B9A;
+    --red:    #B71C1C;
+    --gray:   #424242;
+    --bg:     #FAFAFA;
+    --card:   #FFFFFF;
+    --border: #E0E0E0;
+    --code-bg:#F5F5F5;
+    --tag-bg: #E3F2FD;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'SimSun', 'Times New Roman', serif;
+    font-size: 15px;
+    background: var(--bg);
+    color: #212121;
+    line-height: 1.8;
+  }
+  /* ─── 导航侧栏 ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 240px; height: 100vh;
+    background: #1A237E;
+    color: #fff;
+    overflow-y: auto;
+    padding: 24px 0 40px;
+    z-index: 100;
+  }
+  nav .nav-title {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #90CAF9;
+    padding: 0 20px 12px;
+    border-bottom: 1px solid #283593;
+    margin-bottom: 8px;
+  }
+  nav a {
+    display: block;
+    padding: 7px 20px;
+    color: #CFD8DC;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background .15s;
+  }
+  nav a:hover { background: #283593; color: #fff; }
+  nav a.h2-link { font-weight: bold; color: #E3F2FD; margin-top: 6px; }
+  nav a.h3-link { padding-left: 32px; }
+  /* ─── 主内容 ─── */
+  main {
+    margin-left: 240px;
+    padding: 40px 56px 80px;
+    max-width: 1000px;
+  }
+  h1 {
+    font-size: 28px;
+    color: var(--blue);
+    border-bottom: 3px solid var(--blue);
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #78909C;
+    font-size: 13px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 20px;
+    color: var(--blue);
+    margin: 48px 0 16px;
+    padding: 8px 16px;
+    border-left: 5px solid var(--blue);
+    background: #E8EAF6;
+    border-radius: 0 6px 6px 0;
+  }
+  h3 {
+    font-size: 16px;
+    color: var(--gray);
+    margin: 28px 0 10px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+  h4 {
+    font-size: 14px;
+    color: var(--gray);
+    margin: 18px 0 6px;
+    font-weight: bold;
+  }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  /* ─── 卡片 ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  /* ─── 代码块 ─── */
+  pre {
+    background: #263238;
+    color: #CFD8DC;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    color: var(--red);
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  /* ─── 表格 ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--blue);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: normal;
+  }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: #F5F5F5; }
+  /* ─── 标签 ─── */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 2px;
+  }
+  .tag-blue   { background: #E3F2FD; color: #1565C0; }
+  .tag-green  { background: #E8F5E9; color: #2E7D32; }
+  .tag-orange { background: #FFF3E0; color: #E65100; }
+  .tag-red    { background: #FFEBEE; color: #B71C1C; }
+  .tag-purple { background: #F3E5F5; color: #6A1B9A; }
+  /* ─── 流程图 ─── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 16px 0;
+  }
+  .flow-box {
+    background: #E3F2FD;
+    border: 1.5px solid #1565C0;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #1565C0;
+    font-weight: bold;
+  }
+  .flow-arrow {
+    color: #90A4AE;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  /* ─── 警告框 ─── */
+  .notice {
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .notice-info   { background:#E3F2FD; border-left: 4px solid #1565C0; }
+  .notice-warn   { background:#FFF8E1; border-left: 4px solid #F9A825; }
+  .notice-danger { background:#FFEBEE; border-left: 4px solid #C62828; }
+  .notice-tip    { background:#E8F5E9; border-left: 4px solid #2E7D32; }
+  /* ─── 章节锚点偏移（避免被固定导航遮挡）─── */
+  [id] { scroll-margin-top: 24px; }
+  @media print {
+    nav { display: none; }
+    main { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     导航侧栏
+════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-title">目录</div>
+  <a class="h2-link" href="#overview">一、软件概述</a>
+  <a class="h3-link" href="#what">是什么</a>
+  <a class="h3-link" href="#arch">技术架构</a>
+
+  <a class="h2-link" href="#start">二、快速上手</a>
+  <a class="h3-link" href="#install">安装与启动</a>
+  <a class="h3-link" href="#api-setup">配置 API</a>
+  <a class="h3-link" href="#first-search">第一次搜索</a>
+
+  <a class="h2-link" href="#ui">三、界面说明</a>
+  <a class="h3-link" href="#ui-keyword">关键词输入区</a>
+  <a class="h3-link" href="#ui-en">英文期刊设置</a>
+  <a class="h3-link" href="#ui-cn">中文期刊设置</a>
+  <a class="h3-link" href="#ui-model">模型设置</a>
+  <a class="h3-link" href="#ui-filter">篇关摘过滤</a>
+  <a class="h3-link" href="#ui-preview">结果预览</a>
+
+  <a class="h2-link" href="#workflow">四、工作原理</a>
+  <a class="h3-link" href="#wf-kw">关键词处理</a>
+  <a class="h3-link" href="#wf-en">英文文献抓取</a>
+  <a class="h3-link" href="#wf-abstract">摘要补全</a>
+  <a class="h3-link" href="#wf-cn">中文文献抓取</a>
+  <a class="h3-link" href="#wf-filter">篇关摘过滤</a>
+  <a class="h3-link" href="#wf-translate">翻译</a>
+  <a class="h3-link" href="#wf-review">综述生成</a>
+  <a class="h3-link" href="#wf-export">导出</a>
+
+  <a class="h2-link" href="#journals">五、收录期刊</a>
+  <a class="h3-link" href="#j-en">英文期刊</a>
+  <a class="h3-link" href="#j-cn">中文期刊</a>
+
+  <a class="h2-link" href="#bool">六、布尔检索语法</a>
+  <a class="h3-link" href="#bool-ops">运算符</a>
+  <a class="h3-link" href="#bool-example">示例</a>
+
+  <a class="h2-link" href="#output">七、输出文件</a>
+  <a class="h3-link" href="#out-excel">Excel 说明</a>
+  <a class="h3-link" href="#out-review">综述说明</a>
+
+  <a class="h2-link" href="#faq">八、常见问题</a>
+  <a class="h2-link" href="#devlog">九、版本历史</a>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     主内容
+════════════════════════════════════════════ -->
+<main>
+
+<h1>PaperTracker 使用说明书</h1>
+<div class="subtitle">经济学论文追踪系统 · 版本 2026-04-08</div>
+
+<!-- ════ 一、软件概述 ════ -->
+<h2 id="overview">一、软件概述</h2>
+
+<h3 id="what">是什么</h3>
+<p>PaperTracker 是一款面向经济学研究者的论文检索与管理桌面工具。只需输入研究关键词，软件可自动完成以下工作流：</p>
+<div class="flow">
+  <div class="flow-box">输入关键词</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">搜索顶刊</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">补全摘要</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">AI翻译</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">导出Excel</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">生成综述</div>
+</div>
+<p>软件覆盖 <strong>英文顶刊 100+ 本</strong>（含 Top5、交大安泰经济类/管理类 A 级以上）和 <strong>中文顶刊 24 本</strong>（通过知网高级检索）。</p>
+<p>软件打包为单一 <code>PaperTracker.exe</code>，无需安装 Python 环境，双击即用。</p>
+
+<h3 id="arch">技术架构</h3>
+<div class="card">
+  <table>
+    <tr><th>功能层</th><th>技术方案</th><th>说明</th></tr>
+    <tr><td>GUI 界面</td><td>PyQt6</td><td>窗口、控件、布局；深色日志区、结果表格</td></tr>
+    <tr><td>英文文献抓取</td><td>CrossRef 公开 API</td><td>按 ISSN + 关键词全文检索，免费无需注册</td></tr>
+    <tr><td>引用数 + 摘要补全</td><td>OpenAlex → Semantic Scholar → 网页爬取</td><td>三级瀑布式补全，多线程并发</td></tr>
+    <tr><td>中文文献抓取</td><td>QWebEngineView（内嵌 Chromium）</td><td>真实浏览器登录知网，状态机驱动翻页</td></tr>
+    <tr><td>AI 翻译 / 综述</td><td>Claude API / OpenAI 兼容接口</td><td>翻译用轻量模型（haiku），综述用强力模型（sonnet）</td></tr>
+    <tr><td>Excel 导出</td><td>openpyxl</td><td>格式化、超链接、冻结窗格、行高自适应</td></tr>
+    <tr><td>打包</td><td>PyInstaller</td><td>单文件 exe，内含所有依赖</td></tr>
+  </table>
+</div>
+
+<!-- ════ 二、快速上手 ════ -->
+<h2 id="start">二、快速上手</h2>
+
+<h3 id="install">安装与启动</h3>
+<p><strong>方式一（推荐）：直接运行 exe</strong></p>
+<pre><code>dist\PaperTracker.exe</code></pre>
+<p>双击即可启动，无需安装任何环境。</p>
+<p><strong>方式二：从源代码运行</strong></p>
+<pre><code>pip install PyQt6 PyQt6-WebEngine openpyxl anthropic
+python paper_tracker.py</code></pre>
+
+<div class="notice notice-warn">
+  <strong>注意</strong>：使用知网（中文文献）功能时，需要额外安装 <code>PyQt6-WebEngine</code>，且版本须与 <code>PyQt6</code> 一致（如均为 6.11.0）。
+</div>
+
+<h3 id="api-setup">配置 API</h3>
+<p>软件翻译和综述功能依赖大语言模型 API。在主界面「模型设置」区填写：</p>
+
+<div class="card">
+  <table>
+    <tr><th>字段</th><th>说明</th><th>示例</th></tr>
+    <tr><td>接口类型</td><td>选择 Anthropic（Claude）或 OpenAI 兼容</td><td>Anthropic（Claude）</td></tr>
+    <tr><td>API Key</td><td>模型服务商提供的密钥</td><td><code>sk-ant-xxxxxxxx</code></td></tr>
+    <tr><td>API 地址</td><td>原生留空；中转站填入完整 URL</td><td><code>https://xxx.com</code></td></tr>
+    <tr><td>翻译模型</td><td>标题/摘要翻译用的轻量模型</td><td><code>claude-haiku-4-5-20251001</code></td></tr>
+    <tr><td>综述模型</td><td>文献综述生成用的强力模型</td><td><code>claude-sonnet-4-6</code></td></tr>
+  </table>
+</div>
+
+<p>所有设置会自动保存到 <code>paper_tracker_settings.json</code>，下次启动自动加载。</p>
+<div class="notice notice-tip">
+  <strong>使用 DeepSeek / 豆包 / Gemini</strong>：将接口类型设为「OpenAI 兼容」，填入对应的 API Key、Base URL（如 <code>https://api.deepseek.com</code>）和模型名（如 <code>deepseek-chat</code>）即可。
+</div>
+
+<h3 id="first-search">第一次搜索</h3>
+<ol>
+  <li>在顶部关键词框中输入研究词（如 <code>minimum wage</code>），按 <kbd>Enter</kbd> 添加</li>
+  <li>在「英文期刊搜索设置」中选择期刊范围（如「Top5」）、年限（如「最近3年」）</li>
+  <li>确认「模型设置」中填写了有效的 API Key</li>
+  <li>点击蓝色「开始抓取」按钮</li>
+  <li>观察右侧日志区进度，完成后在「结果预览」标签页查看论文列表</li>
+  <li>结果自动导出到 <code>D:\claude\research\results\tables\YYYYMMDD\</code> 目录</li>
+</ol>
+
+<!-- ════ 三、界面说明 ════ -->
+<h2 id="ui">三、界面说明</h2>
+
+<h3 id="ui-keyword">关键词输入区</h3>
+<div class="card">
+  <p>位于窗口顶部，分为两个部分：</p>
+  <ul>
+    <li><strong>输入框</strong>：输入关键词后按 <kbd>Enter</kbd> 或逗号添加为「词条」。支持中文（自动翻译为英文学术词后检索）和英文。</li>
+    <li><strong>词条（Chip）区</strong>：已添加的关键词以彩色标签展示，点击「×」删除。</li>
+    <li><strong>运算符按钮</strong>：输入框下方提供 5 个彩色运算符按钮（<span class="tag tag-blue">*</span><span class="tag tag-green">+</span><span class="tag tag-orange">-</span><span class="tag tag-purple">(</span><span class="tag tag-purple">)</span>），点击将符号插入到光标处。</li>
+  </ul>
+  <p>输入框实时高亮运算符，与按钮配色一致。</p>
+</div>
+
+<div class="notice notice-info">
+  <strong>多关键词行为</strong>：添加多个词条时，软件会<strong>逐个词条</strong>独立执行一次完整的搜索流程，各自输出独立的 Excel 和综述文件。
+</div>
+
+<h3 id="ui-en">英文期刊搜索设置</h3>
+<div class="card">
+  <table>
+    <tr><th>控件</th><th>说明</th></tr>
+    <tr><td>期刊范围</td><td>全部期刊 / 仅 Top5 / 经济类 / 管理类 / 仅英文顶刊（22本）</td></tr>
+    <tr><td>年限</td><td>最近 1 / 3 / 5 / 10 年</td></tr>
+    <tr><td>搜索模式</td><td>最新+高引 / 仅最新 / 仅高引</td></tr>
+    <tr><td>最大数量</td><td>每个期刊最多抓取的论文篇数上限</td></tr>
+    <tr><td>翻译标题/摘要</td><td>勾选后调用 AI 翻译中文，不勾选则直接导出英文</td></tr>
+  </table>
+</div>
+
+<h3 id="ui-cn">中文期刊搜索设置</h3>
+<div class="card">
+  <table>
+    <tr><th>控件</th><th>说明</th></tr>
+    <tr><td>搜索中文文献（知网）</td><td>启用知网抓取功能（需已安装 PyQt6-WebEngine）</td></tr>
+    <tr><td>抓取数量</td><td>每本期刊最多抓取的论文篇数（可自由填写）</td></tr>
+    <tr><td>排序方式</td><td>发表时间 / 被引次数 / 相关度 / 下载次数 / 综合</td></tr>
+    <tr><td>选择中文期刊</td><td>点击弹出多选对话框，可逐本勾选；勾选状态跨次启动保留</td></tr>
+    <tr><td>知网登录</td><td>点击弹出内嵌浏览器，在校园网/VPN 环境中手动登录，Cookie 自动持久化</td></tr>
+  </table>
+  <p>「选择期刊」按钮显示当前勾选数量（如「选择期刊 (20/24)」）。</p>
+</div>
+
+<h3 id="ui-model">模型设置</h3>
+<p>见<a href="#api-setup">配置 API</a>节。翻译模型和综述模型均支持下拉选择预置选项，也可手动输入自定义模型名。</p>
+
+<h3 id="ui-filter">篇关摘过滤</h3>
+<p>位于「开始抓取」按钮左侧：</p>
+<div class="card">
+  <ul>
+    <li><strong>篇关摘过滤</strong>（蓝色开关）：启用后，只保留检索词出现在指定字段的论文。</li>
+    <li><strong>篇名 / 关键词 / 摘要</strong>（绿色字段选项）：选择要匹配哪些字段。字段选项仅在开关启用时可点。</li>
+  </ul>
+  <p><strong>对中文文献的处理</strong>：知网检索本身已在服务端完成主题词匹配，程序不对知网结果进行二次过滤，但仍会标注「匹配位置」列。</p>
+</div>
+
+<h3 id="ui-preview">结果预览</h3>
+<p>搜索完成后切换到「结果预览」标签页，展示全部返回论文（无篇数上限）。可在此选中知网来源的行后点击「⬇ 下载选中论文 PDF（知网）」批量下载全文。</p>
+
+<!-- ════ 四、工作原理 ════ -->
+<h2 id="workflow">四、工作原理</h2>
+
+<h3 id="wf-kw">1. 关键词处理</h3>
+<p>用户输入的关键词首先经过语言检测：若含有中文字符（CJK Unicode），则调用 LLM（轻量模型）将其翻译为对应的英文学术词，再用英文词去检索英文期刊；原始中文词直接用于知网检索。</p>
+<div class="card">
+  <strong>示例</strong>：输入「创新」→ LLM 翻译为 <code>innovation</code> → 用 <code>innovation</code> 检索 CrossRef；知网检索仍用「创新」作为主题词。
+</div>
+
+<h3 id="wf-en">2. 英文文献抓取（CrossRef）</h3>
+<p>核心函数：<code>_crossref_search_journal()</code></p>
+<p>对每本收录期刊，构造 CrossRef API 请求：</p>
+<pre><code>GET https://api.crossref.org/works
+  ?query={关键词}
+  &filter=has-issn:true,issn:{ISSN},from-pub-date:{年份起}
+  &select=DOI,title,abstract,author,published,container-title,subject
+  &sort=relevance|published
+  &rows={最大数量}
+  &mailto={邮箱}</code></pre>
+
+<div class="notice notice-info">
+  <strong>NBER Working Paper 特殊处理</strong>：NBER 没有标准 ISSN，改用 CrossRef 机构 ID：<code>filter=member:1960,type:report,from-pub-date:{年份}</code>。
+</div>
+
+<p>所有期刊的请求通过 <code>ThreadPoolExecutor</code> 多线程并发发出，加快抓取速度。</p>
+
+<p><strong>搜索模式</strong>对抓取行为的影响：</p>
+<ul>
+  <li><span class="tag tag-blue">最新+高引</span>：先抓 <code>sort=published</code> 最近若干篇，再抓 <code>sort=relevance</code>（相关度高→引用数高）若干篇，合并去重</li>
+  <li><span class="tag tag-green">仅最新</span>：仅按发表时间倒序</li>
+  <li><span class="tag tag-orange">仅高引</span>：仅按相关度（在 CrossRef 侧代理高引用）</li>
+</ul>
+
+<h3 id="wf-abstract">3. 摘要补全（三级瀑布）</h3>
+<p>CrossRef 原始数据中约 60–80% 的论文缺少摘要。程序采用三级依次补全策略：</p>
+
+<div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="flow-box" style="width:180px; text-align:center;">① OpenAlex API</div>
+    <span>批量 DOI 查询，倒排索引还原摘要。覆盖率约 75–85%。<strong>8 线程并发</strong>，处理千篇约 10 秒。</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="flow-box" style="width:180px; text-align:center;">② Semantic Scholar</div>
+    <span>小批次 25 条 + 指数退避重试（应对 HTTP 429 限流）。补充 OpenAlex 未能覆盖的部分。</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="flow-box" style="width:180px; text-align:center;">③ 网页爬取</div>
+    <span>直接爬取 DOI 对应论文页面，提取 <code>&lt;meta name="citation_abstract"&gt;</code> 等标签。<strong>10 线程并发</strong>。特别处理 Elsevier 两级跳转（doi.org → linkinghub → ScienceDirect）。</span>
+  </div>
+</div>
+
+<p>三个阶段完成后，日志仅显示最终仍缺失摘要的篇数（「无公开摘要」），不打印逐篇 warning。</p>
+
+<h3 id="wf-cn">4. 中文文献抓取（知网）</h3>
+<p>核心组件：<code>CnkiManager(QObject)</code></p>
+
+<p>由于知网是 SPA（单页应用），需要真实浏览器环境。程序内嵌 <strong>QWebEngineView（Chromium 内核）</strong>，通过状态机驱动整个搜索流程：</p>
+
+<div class="card">
+  <p><strong>状态机流转：</strong></p>
+  <div class="flow" style="flex-wrap:wrap;">
+    <div class="flow-box">idle</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">navigating</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">filling</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">filling_submitted</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">polling</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">abs_loading</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">idle</div>
+  </div>
+  <ul style="margin-top:12px;">
+    <li><strong>navigating</strong>：导航至知网高级检索页 (<code>kns8s/AdvSearch</code>)，等待 <code>loadFinished</code></li>
+    <li><strong>filling</strong>：注入 JS 填写「主题词」（<code>gradetxt-1</code>）和「文献来源」（<code>gradetxt-3</code>，填入 <code>期刊A OR 期刊B OR ...</code>）并提交</li>
+    <li><strong>filling_submitted</strong>：等待搜索结果页加载完成</li>
+    <li><strong>polling</strong>：每 600ms 注入 JS 轮询结果列表，提取论文信息；同时应用年份过滤（自动勾选结果页左侧的年度复选框）和排序切换</li>
+    <li><strong>abs_loading</strong>：对每篇论文逐一注入 JS 点击详情链接，等待详情页加载后提取摘要和下载链接</li>
+  </ul>
+</div>
+
+<p>程序使用 <code>QWebEngineProfile("cnki_session")</code> 持久化 Cookie，<strong>一次登录，跨启动复用</strong>。</p>
+<p><strong>篇关摘过滤对知网的处理</strong>：知网的「主题词」检索本身已覆盖篇名+关键词+摘要三字段，程序信任知网服务端的匹配结果，不对知网返回论文进行本地二次过滤，但仍标注「匹配位置」列（若摘要缺失显示「摘要缺失（知网已匹配）」）。</p>
+
+<h3 id="wf-filter">5. 篇关摘过滤</h3>
+<p>仅作用于英文文献，在摘要补全完成后、翻译开始前执行：</p>
+<ol>
+  <li>将用户勾选字段（篇名 / 关键词 / 摘要）的文本拼合为整体</li>
+  <li>对整体文本求值布尔表达式（详见<a href="#bool">布尔检索语法</a>节）</li>
+  <li>通过过滤的论文保留；未通过的丢弃（日志显示丢弃数量）</li>
+  <li>无论是否开启过滤，<strong>始终</strong>计算并填写 Excel「匹配位置」列</li>
+</ol>
+
+<table>
+  <tr><th>匹配位置值</th><th>含义</th></tr>
+  <tr><td>篇名</td><td>检索词出现在标题中</td></tr>
+  <tr><td>关键词</td><td>检索词出现在论文关键词中</td></tr>
+  <tr><td>摘要</td><td>检索词出现在摘要中</td></tr>
+  <tr><td>篇名、摘要</td><td>两处均出现</td></tr>
+  <tr><td>摘要缺失</td><td>该论文无公开摘要，无法判断</td></tr>
+  <tr><td>词项未出现</td><td>有内容但不含检索词（未启用过滤时可能保留）</td></tr>
+  <tr><td>知网主题词已匹配</td><td>知网文献，服务端已确认相关</td></tr>
+</table>
+
+<h3 id="wf-translate">6. 翻译</h3>
+<p>核心函数：<code>_call_claude()</code>（内部调用 <code>_call_llm()</code>）</p>
+<p>采用<strong>逐篇翻译</strong>方式，对每篇论文发送独立请求，prompt 格式固定：</p>
+<pre><code>请将以下经济学论文的标题和摘要翻译成中文，保持学术语言风格。
+英文标题：{title}
+英文摘要：{abstract}
+请直接输出：
+标题：[中文标题]
+摘要：[中文摘要]</code></pre>
+<p>不依赖 JSON 解析，任意一篇翻译失败不影响其他篇。使用<strong>轻量模型</strong>（默认 claude-haiku-4-5-20251001），速度快、成本低。</p>
+
+<h3 id="wf-review">7. 综述生成</h3>
+<p>核心函数：<code>generate_review()</code>，使用<strong>强力模型</strong>（默认 claude-sonnet-4-6）。</p>
+<p>以筛选后的全部论文作为输入，每篇送入：英文标题（+中文译名）、期刊+年份+被引次数、作者（≤3人+et al.）、摘要前 300 字。</p>
+
+<div class="card">
+  <p><strong>两阶段生成机制（论文数 &gt; 40 篇时自动启用）</strong></p>
+  <ul>
+    <li><strong>阶段一</strong>：将文献按每批 40 篇分组，每批独立调用 LLM 提炼核心发现（约 600–900 字/批，<code>max_tokens=2048</code>），某批失败时跳过</li>
+    <li><strong>阶段二</strong>：将全部批次的提炼结果拼合后，一次调用 LLM 生成完整综述（<code>max_tokens=8192</code>），要求跨批次综合归纳</li>
+  </ul>
+  <p>此设计可规避中转站代理约 120 秒的超时限制。</p>
+</div>
+
+<p><strong>综述风格</strong>（可在 UI 中切换）：</p>
+<ul>
+  <li><span class="tag tag-blue">学术综述</span>：详细 1500–2500 字，含研究问题、主要发现、方法论和争议</li>
+  <li><span class="tag tag-green">简洁综述</span>：500–800 字，精炼摘要</li>
+  <li><span class="tag tag-orange">英文综述</span>：与学术综述等长，全英文输出</li>
+</ul>
+<p>参考文献格式：<em>Author et al. (Year). *Title*. *Journal*.</em>（英文原版，中文译名作括号补充）。</p>
+
+<h3 id="wf-export">8. 导出</h3>
+<p>完成后自动调用 openpyxl 生成 Excel 文件。输出路径：</p>
+<pre><code>D:\claude\research\results\tables\YYYYMMDD\papers_{关键词}_{YYYYMMDD}.xlsx
+D:\claude\research\paper\review_{关键词}_{YYYYMMDD}.txt</code></pre>
+<p>若默认目录不可写，则退回到桌面 <code>PaperTracker\</code> 文件夹。文件名中的 Windows 非法字符（<code>\ / : * ? " &lt; &gt; |</code>）自动替换为下划线。</p>
+
+<!-- ════ 五、收录期刊 ════ -->
+<h2 id="journals">五、收录期刊</h2>
+
+<h3 id="j-en">英文期刊</h3>
+
+<h4>Top5 综合经济学（5本）</h4>
+<table>
+  <tr><th>缩写</th><th>期刊名</th></tr>
+  <tr><td>AER</td><td>American Economic Review</td></tr>
+  <tr><td>QJE</td><td>Quarterly Journal of Economics</td></tr>
+  <tr><td>JPE</td><td>Journal of Political Economy</td></tr>
+  <tr><td>REStud</td><td>Review of Economic Studies</td></tr>
+  <tr><td>ECMA</td><td>Econometrica</td></tr>
+</table>
+
+<h4>英文其他顶刊（18本，含 NBER WP）</h4>
+<table>
+  <tr><th>缩写</th><th>期刊名</th><th>领域</th></tr>
+  <tr><td>REStat</td><td>Review of Economics and Statistics</td><td>综合</td></tr>
+  <tr><td>JEL</td><td>Journal of Economic Literature</td><td>综合</td></tr>
+  <tr><td>JEP</td><td>Journal of Economic Perspectives</td><td>综合</td></tr>
+  <tr><td>AEJ:AE / EP / Mac / Mic</td><td>American Economic Journal 系列</td><td>综合</td></tr>
+  <tr><td>JF</td><td>Journal of Finance</td><td>金融</td></tr>
+  <tr><td>JFE</td><td>Journal of Financial Economics</td><td>金融</td></tr>
+  <tr><td>RFS</td><td>Review of Financial Studies</td><td>金融</td></tr>
+  <tr><td>JFQA</td><td>Journal of Financial and Quantitative Analysis</td><td>金融</td></tr>
+  <tr><td>JOLE</td><td>Journal of Labor Economics</td><td>劳动</td></tr>
+  <tr><td>JHR</td><td>Journal of Human Resources</td><td>劳动</td></tr>
+  <tr><td>JDE</td><td>Journal of Development Economics</td><td>发展</td></tr>
+  <tr><td>JIE</td><td>Journal of International Economics</td><td>国际</td></tr>
+  <tr><td>JoE</td><td>Journal of Econometrics</td><td>计量</td></tr>
+  <tr><td>NBER WP</td><td>NBER Working Paper</td><td>工作论文</td></tr>
+</table>
+
+<h4>经济类期刊（交大安泰 A/A-，共 50 本）</h4>
+<p>涵盖 RAND J ECON、J PUBLIC ECON、J MONETARY ECON、J ECON THEORY 等国际主流经济学期刊。完整列表见程序内「收录期刊」弹窗。</p>
+
+<h4>管理类期刊（交大安泰 A/A-，共 46 本）</h4>
+<p>涵盖 MANAGE SCI、ORGAN SCI、J MARKETING、J FINANC ECON 等国际主流管理学期刊。完整列表见程序内「收录期刊」弹窗。</p>
+
+<h3 id="j-cn">中文期刊（24本）</h3>
+<table>
+  <tr><th>级别</th><th>期刊</th></tr>
+  <tr><td>特A / A+</td><td>经济研究、管理世界、经济学(季刊)、世界经济</td></tr>
+  <tr><td>A</td><td>中国工业经济、数量经济技术经济研究、金融研究、统计研究、经济学动态、中国农村经济</td></tr>
+  <tr><td>A-</td><td>中国人口·资源与环境、财贸经济、国际贸易问题、南开经济研究、经济科学、财经研究、经济评论、经济学家、国际金融研究、产业经济研究</td></tr>
+  <tr><td>管理类补充</td><td>会计研究、管理科学学报、系统工程理论与实践、中国行政管理</td></tr>
+</table>
+
+<!-- ════ 六、布尔检索语法 ════ -->
+<h2 id="bool">六、布尔检索语法</h2>
+<p>在关键词输入框中可使用布尔运算符组合多个检索词，实现精准筛选。</p>
+
+<h3 id="bool-ops">运算符说明</h3>
+<table>
+  <tr><th>运算符</th><th>含义</th><th>优先级</th><th>示例</th></tr>
+  <tr><td><code>A * B</code></td><td>AND（且）：A 和 B 同时出现</td><td>高</td><td><code>innovation * technology</code></td></tr>
+  <tr><td><code>A + B</code></td><td>OR（或）：A 或 B 出现其一</td><td>低</td><td><code>innovation + technology</code></td></tr>
+  <tr><td><code>- A</code></td><td>NOT（非，一元前缀）：A 不出现</td><td>高于 AND</td><td><code>innovation * - policy</code></td></tr>
+  <tr><td><code>( )</code></td><td>括号分组，改变优先级</td><td>最高</td><td><code>(innovation + robot) * wage</code></td></tr>
+  <tr><td><code>'...'</code></td><td>精确短语匹配</td><td>原子</td><td><code>'minimum wage' * china</code></td></tr>
+</table>
+
+<p><strong>优先级顺序（高→低）</strong>：括号 &gt; NOT &gt; AND(<code>*</code>) &gt; OR(<code>+</code>)</p>
+
+<h3 id="bool-example">完整示例</h3>
+<div class="card">
+  <p><strong>目标</strong>：检索「与机器人或人工智能相关的劳动市场研究，但不包括纯理论模型论文」</p>
+  <pre><code>(robot + 'artificial intelligence') * labor * - theory</code></pre>
+  <p><strong>解释</strong>：</p>
+  <ul>
+    <li><code>(robot + 'artificial intelligence')</code>：标题/摘要/关键词中需出现「robot」或「artificial intelligence」</li>
+    <li><code>* labor</code>：同时需要出现「labor」</li>
+    <li><code>* - theory</code>：同时不能出现「theory」</li>
+  </ul>
+  <p><strong>CrossRef 侧行为</strong>：程序自动提取所有词项（robot、artificial intelligence、labor、theory），拼接为 CrossRef 相关性搜索词，保证召回率。过滤由程序在本地执行。</p>
+</div>
+
+<div class="notice notice-warn">
+  <strong>注意</strong>：布尔过滤是本地文本匹配，大小写不敏感，但需要检索词精确出现在字段文本中（子串匹配）。对知网文献<strong>不生效</strong>（知网服务端已处理）。
+</div>
+
+<!-- ════ 七、输出文件 ════ -->
+<h2 id="output">七、输出文件</h2>
+
+<h3 id="out-excel">Excel 文件说明</h3>
+<p>文件包含「论文列表」和「汇总统计」两个 Sheet。</p>
+
+<h4>论文列表 Sheet 列说明</h4>
+<table>
+  <tr><th>列名</th><th>说明</th></tr>
+  <tr><td>序号</td><td>从 1 开始的序号</td></tr>
+  <tr><td>英文标题</td><td>原始英文标题</td></tr>
+  <tr><td>中文标题</td><td>AI 翻译的中文标题</td></tr>
+  <tr><td>作者</td><td>最多 3 位作者 + et al.（知网文献列全部作者）</td></tr>
+  <tr><td>期刊</td><td>期刊全名</td></tr>
+  <tr><td>年份</td><td>发表年份</td></tr>
+  <tr><td>被引次数</td><td>来自 CrossRef / Semantic Scholar / OpenAlex</td></tr>
+  <tr><td>英文摘要</td><td>原始英文摘要（经三级补全流程）</td></tr>
+  <tr><td>中文摘要</td><td>AI 翻译的中文摘要</td></tr>
+  <tr><td>匹配位置</td><td>检索词出现的字段位置（篇名/关键词/摘要）</td></tr>
+  <tr><td>DOI / 链接</td><td>超链接，点击跳转论文原始页面</td></tr>
+  <tr><td>来源</td><td>crossref（英文）或 cnki（知网）</td></tr>
+  <tr><td>下载 PDF</td><td>知网文献：「⬇ 下载」超链接（需登录知网）；英文文献为空</td></tr>
+</table>
+
+<h4>格式特性</h4>
+<ul>
+  <li>首行冻结（滚动时标题行固定）</li>
+  <li>摘要列启用自动换行，行高根据摘要长度自适应（18–300 pt）</li>
+  <li>知网论文行背景色区分（浅黄色）</li>
+  <li>DOI / 下载链接为超链接格式，蓝色下划线</li>
+</ul>
+
+<h3 id="out-review">综述文件说明</h3>
+<p>纯文本格式（.txt），UTF-8 编码。内容包含：</p>
+<ul>
+  <li>标题（关键词 + 日期）</li>
+  <li>正文（1500–2500 字，含研究问题、发现、方法、争议）</li>
+  <li>参考文献列表（英文原版格式：<em>Author et al. (Year). *Title*. *Journal*.</em>）</li>
+</ul>
+
+<!-- ════ 八、常见问题 ════ -->
+<h2 id="faq">八、常见问题</h2>
+
+<div class="card">
+  <h4>Q：知网功能显示「需安装 PyQt6-WebEngine」</h4>
+  <p>A：请确认已安装，且版本与 PyQt6 完全一致：</p>
+  <pre><code>pip install --force-reinstall PyQt6-WebEngine</code></pre>
+  <p>安装后重启程序。如果运行 exe 版本，则不支持知网功能（需从源代码运行）。</p>
+</div>
+
+<div class="card">
+  <h4>Q：知网返回 0 篇</h4>
+  <p>A：常见原因：</p>
+  <ul>
+    <li>未登录知网 → 点击「知网登录」按钮，在弹出浏览器中完成登录</li>
+    <li>当前 IP 无知网访问权限 → 确保在校园网或机构 VPN 环境下使用</li>
+    <li>知网页面结构变动 → 可尝试重新登录</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h4>Q：摘要列大量为空</h4>
+  <p>A：程序已尝试三级补全（OpenAlex → Semantic Scholar → 网页爬取）。仍为空的论文属于出版商未公开摘要（常见于 Elsevier 旗下期刊的早期论文），属正常现象，日志会汇总显示「仍缺失 X 篇（无公开摘要）」。</p>
+</div>
+
+<div class="card">
+  <h4>Q：篇关摘过滤开启后中文文献全被过滤</h4>
+  <p>A：这是已修复的问题。知网文献不参与本地过滤，如仍出现此情况请确认使用的是 2026-04-08 及以后的版本。</p>
+</div>
+
+<div class="card">
+  <h4>Q：生成综述时报连接错误</h4>
+  <p>A：通常是中转站代理超时（论文数量多时 prompt 大，响应慢）。程序已内置两阶段生成（>40篇自动拆批），若仍超时可先用篇关摘过滤缩小论文数量再生成。</p>
+</div>
+
+<div class="card">
+  <h4>Q：窗口启动后占满全屏无法调节</h4>
+  <p>A：删除 <code>paper_tracker_settings.json</code> 中的 <code>window_geometry</code> 字段，或直接删除该文件后重启程序。</p>
+</div>
+
+<div class="card">
+  <h4>Q：中文关键词搜出的英文论文不相关</h4>
+  <p>A：程序会用 AI 将中文词翻译为英文学术词再检索，翻译结果可在日志中查看。如果翻译不准确，可直接在输入框输入英文关键词。</p>
+</div>
+
+<!-- ════ 九、版本历史 ════ -->
+<h2 id="devlog">九、版本历史</h2>
+
+<table>
+  <tr><th>日期</th><th>主要更新</th></tr>
+  <tr><td>2026-04-08</td><td>修复篇关摘误删知网文献；综述两阶段生成（>40篇）；Excel 新增下载PDF列；预览改为显示全部；行高自适应；模型下拉选择</td></tr>
+  <tr><td>2026-04-07</td><td>集成知网内嵌浏览器抓取；知网期刊多选对话框；参数区三分组重构；复选框打勾样式；NBER WP 支持；字体改宋体；全局字号调大；知网排序/年份过滤；PDF下载功能；布尔检索运算符按钮；接口兼容 OpenAI 格式</td></tr>
+  <tr><td>2026-04-05</td><td>添加管理类/经济类期刊（交大安泰）；修复 Excel 摘要为空（OpenAlex + 网页三级补全）；多线程并发提速；篇关摘三字段独立勾选；布尔检索表达式支持；综述参考文献改英文原版</td></tr>
+  <tr><td>2026-04-01</td><td>合并为单文件 paper_tracker.py；打包为 PaperTracker.exe；中文关键词自动翻译；中转站 API 支持；设置持久化</td></tr>
+  <tr><td>2026-03-xx</td><td>初始版本（多文件版）：CrossRef 抓取、Claude 翻译/综述、PyQt6 GUI、Excel 导出</td></tr>
+</table>
+
+<div style="margin-top:60px; color:#90A4AE; font-size:12px; text-align:center; border-top:1px solid var(--border); padding-top:20px;">
+  PaperTracker · 经济学论文追踪系统 · 说明书生成于 2026-04-09
+</div>
+
+</main>
+
+</body>
+</html>
+"""
+
 # =============================================================================
 # PyQt6 GUI
 # =============================================================================
@@ -3391,8 +4124,22 @@ class MainWindow(QMainWindow):
         """)
         feedback_btn.clicked.connect(lambda: FeedbackDialog(self).exec())
 
+        manual_btn = QPushButton("📖 使用说明")
+        manual_btn.setFixedHeight(28)
+        manual_btn.setFixedWidth(100)
+        manual_btn.setStyleSheet("""
+            QPushButton {
+                background: #E8F5E9; color: #2E7D32;
+                border: 1px solid #A5D6A7; border-radius: 4px;
+                font-family: 'SimSun', 'Times New Roman'; font-size: 13px;
+            }
+            QPushButton:hover { background: #C8E6C9; }
+        """)
+        manual_btn.clicked.connect(self._show_manual)
+
         title_row.addWidget(title_label)
         title_row.addStretch()
+        title_row.addWidget(manual_btn)
         title_row.addWidget(feedback_btn)
         title_row.addWidget(search_info_btn)
         title_row.addWidget(syntax_btn)
@@ -4180,6 +4927,37 @@ class MainWindow(QMainWindow):
         return w
 
     # ── 关键词管理 ─────────────────────────────────────────────────────────────
+
+    def _show_manual(self):
+        dlg = QDialog(self)
+        dlg.setWindowTitle("使用说明")
+        dlg.resize(980, 750)
+        dlg.setStyleSheet("QDialog { background: #FAFAFA; }")
+        layout = QVBoxLayout(dlg)
+        layout.setContentsMargins(0, 0, 0, 0)
+        if WEBENGINE_AVAILABLE:
+            from PyQt6.QtWebEngineWidgets import QWebEngineView
+            from PyQt6.QtCore import QUrl
+            view = QWebEngineView()
+            view.setHtml(_MANUAL_HTML, QUrl("about:blank"))
+            layout.addWidget(view)
+        else:
+            import tempfile, webbrowser
+            tmp = os.path.join(tempfile.gettempdir(), "pt_manual.html")
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(_MANUAL_HTML)
+            webbrowser.open(f"file:///{tmp}")
+            return
+        close_btn = QPushButton("关闭")
+        close_btn.setFixedHeight(28)
+        close_btn.setFixedWidth(80)
+        close_btn.clicked.connect(dlg.accept)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        btn_row.addWidget(close_btn)
+        btn_row.setContentsMargins(8, 6, 8, 8)
+        layout.addLayout(btn_row)
+        dlg.exec()
 
     def _show_search_info(self):
         dlg = QDialog(self)
