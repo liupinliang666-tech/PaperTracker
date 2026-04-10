@@ -1,0 +1,4 @@
+PyQt6>=6.4.0
+openpyxl>=3.1.0
+# 知网 PDF 下载功能（可选）：
+# pip install PyQt6-WebEngine
