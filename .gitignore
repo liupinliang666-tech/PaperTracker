@@ -1,0 +1,17 @@
+# 个人配置和登录信息
+gui_settings.json
+paper_tracker_settings.json
+cnki_cookies.json
+
+# 日志
+*.log
+
+# 打包产物
+build/
+dist/
+*.spec
+__pycache__/
+
+# 开发内部文档
+devlog.md
+memory.md
